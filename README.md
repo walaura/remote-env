@@ -14,7 +14,7 @@ So there's an alexa and a skill, that part is easy, it lives on AWS and basicall
 
 ### config bucket
 
-There's a single `.config.json` with all environment variables – you can check its shape in `config.ts` and you can either generate it yourself or (this is v cool) set a `CONFIG_URL` in your `.env` to download it and keep it fresh
+There's a single `.config.json` with all environment variables – you can check its shape in `config.ts` and you can either generate it yourself or (this is v cool) set a `REMOTE_ENV_URL` in your `.env` to download it and keep it fresh
 
 ### fish (express app on glitch)
 

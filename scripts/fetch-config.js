@@ -1,44 +1,75 @@
+#!/usr/bin/env node
+
 require("dotenv").config();
 const fetch = require("node-fetch");
 const fs = require("fs");
-
-const configAt = __dirname + "/../.config.json";
+const chalk = require("chalk");
+const { configAt } = require("../src/config");
 
 let existsAlready = false;
 
+const info = msg => chalk.blue("ℹ️ " + msg);
+const yay = msg => chalk.green("😻 " + msg);
+const error = msg => chalk.red("🤯 " + msg);
+
 const main = async () => {
   if (fs.existsSync(configAt)) {
-    console.info("💁‍♀️ you got a config file already!");
+    console.info(info("You got a config file already!"));
     existsAlready = true;
   }
-  if (!process.env.CONFIG_URL) {
+  if (!process.env.REMOTE_ENV_URL) {
     if (existsAlready) {
       console.info(
-        "💁‍♀️ you dont have CONFIG_URL set up but you already have a config file so it all worked out"
+        info(
+          `You dont have ${chalk.white(
+            "REMOTE_ENV_URL"
+          )} set up but you already have a config file so it all worked out`
+        )
       );
     } else {
       console.error(
-        `🤯 Please set CONFIG_URL in your env or manually add a /.config.json file as seen in config.ts`,
-        e
+        error(
+          `Please set ${chalk.white(
+            "REMOTE_ENV_URL"
+          )} in your env or manually add a ${chalk.white("/.config.json")} file`
+        )
       );
       process.exit(1);
     }
     return;
   }
   try {
-    const config = await fetch(process.env.CONFIG_URL).then(res => res.json());
+    const config = await fetch(process.env.REMOTE_ENV_URL).then(res =>
+      res.json()
+    );
     fs.writeFileSync(configAt, JSON.stringify(config, null, "\t"));
-    console.log(__dirname + "/../.config.json");
+    console.info(
+      yay(
+        existsAlready
+          ? `Updated config in ${chalk.white(configAt)}`
+          : `Downloaded config to ${chalk.white(configAt)}`
+      )
+    );
   } catch (e) {
     if (existsAlready) {
       console.error(e);
       console.error(
-        `🤯 Unable to fetch config from ${process.env.CONFIG_URL}. Using existing config. is it stale?`
+        info(
+          `Unable to fetch config from ${chalk.white(
+            process.env.REMOTE_ENV_URL
+          )}. Using existing config. is it stale?`
+        )
       );
     } else {
       console.error(e);
       console.error(
-        `🤯 Unable to fetch config from ${process.env.CONFIG_URL}. Please check the URL or manually add a .config.json file`
+        error(
+          `Unable to fetch config from ${chalk.white(
+            process.env.REMOTE_ENV_URL
+          )}. Please check the URL or manually add a ${chalk.white(
+            "/.config.json"
+          )} file`
+        )
       );
       process.exit(1);
     }
