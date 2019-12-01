@@ -1,5 +1,5 @@
 {
-  "name": "remote-env",
+  "name": "@walaura/remote-env",
   "version": "1.0.0",
   "description": "oh FUCK you are here.",
   "main": "index.js",

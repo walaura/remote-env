@@ -32,7 +32,7 @@ REMOTE_ENV_URL=asdf://butts.lol/config.json
 ## index.js
 
 ```js
-const config = require("remote-env");
+const config = require("@walaura/remote-env");
 
 config.token === "banana";
 ```
